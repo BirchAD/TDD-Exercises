@@ -1,5 +1,6 @@
-require "quantity"
+require 'quantity'
 
+# Unit Converter
 class UnitConverter
   def initialize(initial_quantity, target_unit)
     @initial_quantity = initial_quantity
@@ -16,14 +17,31 @@ class UnitConverter
   private
 
   CONVERSION_FACTORS = {
-    cup: {
-      liter: 0.236588
+    liter: {
+      cup: 4.226775,
+      liter: 1,
+      pint: 2.11338
+    },
+    gram: {
+      gram: 1,
+      kilogram: 1000
     }
   }
 
   def conversion_factor(from:, to:)
-    CONVERSION_FACTORS[from][to] ||
-    raise(DimensionalMismatchError, "Can't convert #{from} to #{to}!")
+    dimension = common_dimension(from, to)
+    if !dimension.nil?
+      CONVERSION_FACTORS[dimension][to] / CONVERSION_FACTORS[dimension][from]
+    else
+      raise(DimensionalMismatchError, "Can't convert #{from} to #{to} unit")
+    end
+  end
+
+  def common_dimension(from, to)
+    CONVERSION_FACTORS.keys.find do |conversion_factor|
+      CONVERSION_FACTORS[conversion_factor].keys.include?(from) &&
+        CONVERSION_FACTORS[conversion_factor].keys.include?(to)
+    end
   end
 end
 
