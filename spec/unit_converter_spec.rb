@@ -22,7 +22,7 @@ describe UnitConverter do
     it 'raises an error if the objects are of differing dimensions' do
       cups = Quantity.new(2, :cup)
       converter = UnitConverter.new(cups, :grams)
-      expect { converter.convert}.to raise_error(DimensionalMismatchError)
+      expect { converter.convert }.to raise_error(DimensionalMismatchError)
     end
   end
 end
